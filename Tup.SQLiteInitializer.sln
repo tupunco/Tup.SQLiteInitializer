@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tup.SQLiteInitializer", "Tup.SQLiteInitializer\Tup.SQLiteInitializer.csproj", "{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tup.SQLiteInitializer.Demo", "Tup.SQLiteInitializer.Demo\Tup.SQLiteInitializer.Demo.csproj", "{BE6E8F5D-9C6B-4696-9809-41B6F2187509}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Debug|x86.Build.0 = Debug|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Release|x86.ActiveCfg = Release|Any CPU
+		{1128D0F3-A8E6-482E-9BD8-25C3606D28B0}.Release|x86.Build.0 = Release|Any CPU
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Debug|x86.ActiveCfg = Debug|x86
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Debug|x86.Build.0 = Debug|x86
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Release|x86.ActiveCfg = Release|x86
+		{BE6E8F5D-9C6B-4696-9809-41B6F2187509}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
