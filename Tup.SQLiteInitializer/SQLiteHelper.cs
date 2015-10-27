@@ -10,6 +10,7 @@ namespace Tup.SQLiteInitializer
     public class SQLiteHelper : IDisposable
     {
         private static readonly object lockDBHelper = new object();
+
         /// <summary>
         /// 连接数据库字符串
         /// </summary>
@@ -19,6 +20,7 @@ namespace Tup.SQLiteInitializer
         /// 数据库连接对象
         /// </summary>
         private DbConnection objConnection;
+
         /// <summary>
         /// 数据库连接对象
         /// </summary>
@@ -31,6 +33,7 @@ namespace Tup.SQLiteInitializer
         /// 执行命令对象
         /// </summary>
         private DbCommand objCommand;
+
         /// <summary>
         /// 创建提供程序工厂
         /// </summary>

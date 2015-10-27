@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tup.SQLiteInitializer.Demo
 {
     /// <summary>
-    /// 门店端 默认 SQLite 数据库初始化器
+    /// 默认 SQLite 数据库初始化器
     /// </summary>
     /// <remarks>
     /// SQLite 库加解密升级说明:
@@ -38,7 +34,9 @@ namespace Tup.SQLiteInitializer.Demo
             base.ToMapping<TestBillEntity>();
             base.ToMapping<TestBillEntity2>();
         }
+
         #region OnDoLegacy
+
         /// <summary>
         /// 处理遗留版本动作
         /// </summary>
@@ -63,6 +61,7 @@ namespace Tup.SQLiteInitializer.Demo
                 }
             }
         }
+
         /// <summary>
         /// 判断库是否为加密库
         /// </summary>
@@ -80,7 +79,8 @@ namespace Tup.SQLiteInitializer.Demo
                 return false;
             }
         }
-        #endregion
+
+        #endregion OnDoLegacy
 
         /// <summary>
         /// 当前数据库版本号
@@ -114,11 +114,10 @@ namespace Tup.SQLiteInitializer.Demo
                 this.Execute(string.Format("insert into t_test_bill (BillGuid,EmployeeId,DiscountPayment) values ('{0}', 789, 78.3)", Guid.NewGuid()));
             }
 
-
             //----新的版本修改放到这里------
             //if (oldVersion < *****)  //***** 新增修改操作
             //{
-            //    
+            //
             //}
             //-------
         }

@@ -22,6 +22,7 @@ namespace Tup.SQLiteInitializer.Common
             if (argument == null)
                 throw new ArgumentNullException(name);
         }
+
         /// <summary>
         /// 对象 null   判断
         /// </summary>
@@ -33,6 +34,7 @@ namespace Tup.SQLiteInitializer.Common
             if (!argument.HasValue)
                 throw new ArgumentNullException(name);
         }
+
         /// <summary>
         /// 字符串对象 null,empty   判断
         /// </summary>
@@ -44,6 +46,7 @@ namespace Tup.SQLiteInitializer.Common
             if (string.IsNullOrEmpty(argument))
                 throw new ArgumentNullException(name);
         }
+
         /// <summary>
         /// 逻辑对象 false   判断
         /// </summary>
@@ -55,6 +58,7 @@ namespace Tup.SQLiteInitializer.Common
             if (!argument)
                 throw new ArgumentNullException(name);
         }
+
         /// <summary>
         /// 时间对象 MinValue  判断
         /// </summary>
@@ -77,6 +81,7 @@ namespace Tup.SQLiteInitializer.Common
             if (argument < 0)
                 throw new ArgumentOutOfRangeException(name);
         }
+
         /// <summary>
         /// 小于等于0   判断
         /// </summary>
@@ -87,6 +92,7 @@ namespace Tup.SQLiteInitializer.Common
             if (argument <= 0)
                 throw new ArgumentOutOfRangeException(name);
         }
+
         /// <summary>
         /// 小于等于0   判断
         /// </summary>
@@ -97,6 +103,7 @@ namespace Tup.SQLiteInitializer.Common
             if (argument <= 0L)
                 throw new ArgumentOutOfRangeException(name);
         }
+
         /// <summary>
         /// 超界    判断
         /// </summary>
@@ -109,6 +116,7 @@ namespace Tup.SQLiteInitializer.Common
             if (argument < lowerBound || argument > upperBound)
                 throw new ArgumentOutOfRangeException(name, string.Format("x<{0} or x>{1}", lowerBound, upperBound));
         }
+
         /// <summary>
         /// 超界    判断
         /// </summary>
@@ -120,6 +128,7 @@ namespace Tup.SQLiteInitializer.Common
             if (!boundArray.Any(x => x == argument))
                 throw new ArgumentOutOfRangeException(name, string.Format("[{0}]", string.Join("],[", Array.ConvertAll(boundArray, x => x.ToString()))));
         }
+
         /// <summary>
         /// 超界    判断
         /// </summary>

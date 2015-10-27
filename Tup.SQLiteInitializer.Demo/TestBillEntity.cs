@@ -59,5 +59,4 @@ namespace Tup.SQLiteInitializer.Demo
         [Column(IsNotNull = true, DefaultValue = "0")]
         public int BillType { get; set; }
     }
-
 }

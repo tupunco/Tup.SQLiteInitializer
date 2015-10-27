@@ -19,7 +19,7 @@ namespace Tup.SQLiteInitializer
         private ISQLiteInitializer Initializer = null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="db"></param>
         private SQLiteDatabaseInitializer() { }
@@ -96,6 +96,7 @@ namespace Tup.SQLiteInitializer
         }
 
         #region 数据库版本升级
+
         /// <summary>
         /// DB 版本
         /// </summary>
@@ -125,6 +126,7 @@ namespace Tup.SQLiteInitializer
         {
             db.ExecuteNonQuery(string.Format("PRAGMA user_version ={0};", version), ConnectionState.KeepOpen);
         }
+
         /// <summary>
         /// Returns true if the new version code is greater than the current database version.
         /// </summary>
@@ -134,7 +136,8 @@ namespace Tup.SQLiteInitializer
         {
             return newVersion > GetVersion(db);
         }
-        #endregion
+
+        #endregion 数据库版本升级
     }
 }
 
@@ -159,12 +162,14 @@ namespace Tup.SQLiteInitializer.Impl
 
         AutoIncPK = 4      // force PK field to be auto inc
     }
+
     /// <summary>
     /// Represents an open connection to a SQLite database.
     /// </summary>
     internal class SQLiteMapping
     {
         public bool Trace { get; set; }
+
         /// <summary>
         /// Current SQLiteDB
         /// </summary>
@@ -189,17 +194,18 @@ namespace Tup.SQLiteInitializer.Impl
         }
 
         #region ToMapping
+
         /// <summary>
         /// Retrieves the mapping that is automatically generated for the given type.
         /// </summary>
         /// <param name="type">
         /// The type whose mapping to the database is returned.
-        /// </param>         
+        /// </param>
         /// <param name="createFlags">
         /// Optional flags allowing implicit PK and indexes based on naming conventions
-        /// </param>     
+        /// </param>
         /// <returns>
-        /// The mapping represents the schema of the columns of the database and contains 
+        /// The mapping represents the schema of the columns of the database and contains
         /// methods to set and get properties of objects.
         /// </returns>
         private TableMapping GetMapping(Type type, CreateFlags createFlags = CreateFlags.None)
@@ -221,7 +227,7 @@ namespace Tup.SQLiteInitializer.Impl
         /// Retrieves the mapping that is automatically generated for the given type.
         /// </summary>
         /// <returns>
-        /// The mapping represents the schema of the columns of the database and contains 
+        /// The mapping represents the schema of the columns of the database and contains
         /// methods to set and get properties of objects.
         /// </returns>
         private TableMapping GetMapping<T>()
@@ -238,6 +244,7 @@ namespace Tup.SQLiteInitializer.Impl
         {
             ToMapping(typeof(T), createFlags);
         }
+
         /// <summary>
         /// 创建表实体映射
         /// </summary>
@@ -256,9 +263,11 @@ namespace Tup.SQLiteInitializer.Impl
             }
             return map;
         }
-        #endregion
+
+        #endregion ToMapping
 
         #region CreateTable
+
         /// <summary>
         /// 创建所有已映射的所有表
         /// </summary>
@@ -274,6 +283,7 @@ namespace Tup.SQLiteInitializer.Impl
 
             return count;
         }
+
         /// <summary>
         /// Executes a "create table if not exists" on the database. It also
         /// creates any specified indexes on the columns of the table. It uses
@@ -287,6 +297,7 @@ namespace Tup.SQLiteInitializer.Impl
         {
             return CreateTable(typeof(T), createFlags);
         }
+
         /// <summary>
         /// Executes a "create table if not exists" on the database. It also
         /// creates any specified indexes on the columns of the table. It uses
@@ -294,7 +305,7 @@ namespace Tup.SQLiteInitializer.Impl
         /// later access this schema by calling GetMapping.
         /// </summary>
         /// <param name="ty">Type to reflect to a database table.</param>
-        /// <param name="createFlags">Optional flags allowing implicit PK and indexes based on naming conventions.</param>  
+        /// <param name="createFlags">Optional flags allowing implicit PK and indexes based on naming conventions.</param>
         /// <returns>
         /// The number of entries added to the database schema.
         /// </returns>
@@ -306,6 +317,7 @@ namespace Tup.SQLiteInitializer.Impl
 
             return InternalCreateTable(map);
         }
+
         /// <summary>
         /// Internal CreateTable
         /// </summary>
@@ -373,7 +385,9 @@ namespace Tup.SQLiteInitializer.Impl
 
             return count;
         }
-        #endregion
+
+        #endregion CreateTable
+
         /// <summary>
         /// 删除已存在索引
         /// </summary>
@@ -387,6 +401,7 @@ namespace Tup.SQLiteInitializer.Impl
             const string sqlFormat = "DROP INDEX IF EXISTS \"{0}\"";
             return Execute(string.Format(sqlFormat, indexName));
         }
+
         /// <summary>
         /// Creates an index for the specified table and column.
         /// </summary>
@@ -483,6 +498,7 @@ namespace Tup.SQLiteInitializer.Impl
             }
             return outList;
         }
+
         /// <summary>
         /// 升级表补充缺失的列
         /// </summary>
@@ -545,6 +561,7 @@ namespace Tup.SQLiteInitializer.Impl
             return this.SQLiteDB.ExecuteNonQuery(query, ConnectionState.KeepOpen);
         }
     }
+
     /// <summary>
     /// TableMapping
     /// </summary>
@@ -560,7 +577,7 @@ namespace Tup.SQLiteInitializer.Impl
         /// 复合主键
         /// </summary>
         /// <remarks>
-        /// Primary Key(BookId,TableId)  
+        /// Primary Key(BookId,TableId)
         /// </remarks>
         public Column[] PKs { get; private set; }
 
@@ -679,13 +696,14 @@ namespace Tup.SQLiteInitializer.Impl
 
         public class Column
         {
-            PropertyInfo _prop;
+            private PropertyInfo _prop;
 
             public string Name { get; private set; }
 
             public string PropertyName { get { return _prop.Name; } }
 
             public Type ColumnType { get; private set; }
+
             /// <summary>
             /// 定制类型
             /// </summary>
@@ -697,6 +715,7 @@ namespace Tup.SQLiteInitializer.Impl
             public bool IsAutoGuid { get; private set; }
 
             public bool IsPK { get; private set; }
+
             /// <summary>
             /// 复合主键时键顺序
             /// </summary>
@@ -757,6 +776,7 @@ namespace Tup.SQLiteInitializer.Impl
             //}
         }
     }
+
     /// <summary>
     /// Orm
     /// </summary>
@@ -765,6 +785,7 @@ namespace Tup.SQLiteInitializer.Impl
         public const int DefaultMaxStringLength = 140;
         public const string ImplicitPkName = "Id";
         public const string ImplicitIndexSuffix = "Id";
+
         /// <summary>
         /// 复合主键拼接
         /// </summary>
@@ -777,8 +798,9 @@ namespace Tup.SQLiteInitializer.Impl
 
             return string.Format(",\r\nPrimary Key({0})\r\n", string.Join(",", pks.OrderBy(p => p.PKOrder).Select(pk => pk.Name)));
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p"></param>
         /// <param name="storeDateTimeAsTicks"></param>
@@ -876,7 +898,7 @@ namespace Tup.SQLiteInitializer.Impl
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="p"></param>
         /// <param name="order">复合主键 顺序</param>

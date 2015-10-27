@@ -46,7 +46,7 @@
         /// </p><p>
         /// This method executes within a transaction.  If an exception is thrown, all changes
         /// will automatically be rolled back.
-        /// </p> 
+        /// </p>
         /// </summary>
         /// <param name="db">The database.</param>
         /// <param name="oldVersion">The old database version.</param>

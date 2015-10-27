@@ -16,6 +16,7 @@ namespace Tup.SQLiteInitializer
         /// 当前数据库版本号
         /// </summary>
         public abstract int NewVersion { get; }
+
         /// <summary>
         /// Default ConnectionString
         /// </summary>
@@ -27,6 +28,7 @@ namespace Tup.SQLiteInitializer
         }
 
         #region OnDoLegacy
+
         /// <summary>
         /// 处理遗留版本动作
         /// </summary>
@@ -34,13 +36,16 @@ namespace Tup.SQLiteInitializer
         {
             OnDoLegacy();
         }
+
         /// <summary>
         /// 处理遗留版本动作
         /// </summary>
         protected abstract void OnDoLegacy();
-        #endregion
+
+        #endregion OnDoLegacy
 
         #region OnCreate
+
         /// <summary>
         /// 当前数据库版本号
         /// </summary>
@@ -53,15 +58,18 @@ namespace Tup.SQLiteInitializer
 
             OnCreate(db, currentVersion);
         }
+
         /// <summary>
         /// 当前数据库版本号
         /// </summary>
         /// <param name="db"></param>
         /// <param name="currentVersion"></param>
         protected abstract void OnCreate(SQLiteHelper db, int currentVersion);
-        #endregion
+
+        #endregion OnCreate
 
         #region OnUpgrade
+
         /// <summary>
         /// 升级数据库时动作
         /// </summary>
@@ -77,6 +85,7 @@ namespace Tup.SQLiteInitializer
             //INFO: 所有数据库操作请加 ConnectionState.KeepOpen 设置
             OnUpgrade(db, oldVersion, newVersion);
         }
+
         /// <summary>
         /// 升级数据库时动作
         /// </summary>
@@ -84,9 +93,11 @@ namespace Tup.SQLiteInitializer
         /// <param name="oldVersion"></param>
         /// <param name="newVersion"></param>
         protected abstract void OnUpgrade(SQLiteHelper db, int oldVersion, int newVersion);
-        #endregion
+
+        #endregion OnUpgrade
 
         #region Utils
+
         /// <summary>
         /// Drop Index IfExists
         /// </summary>
@@ -96,6 +107,7 @@ namespace Tup.SQLiteInitializer
         {
             return SQLiteMapping.DropIndexIfExists(indexName);
         }
+
         /// <summary>
         /// Execute SQL
         /// </summary>
@@ -105,6 +117,7 @@ namespace Tup.SQLiteInitializer
         {
             return SQLiteMapping.Execute(sql);
         }
-        #endregion
+
+        #endregion Utils
     }
 }

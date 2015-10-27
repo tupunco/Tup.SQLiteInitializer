@@ -3,6 +3,7 @@
 namespace Tup.SQLiteInitializer
 {
     #region 表映射 特征
+
     //FREOM: https://github.com/koush/sqlite-net/blob/master/src/SQLite.cs
     /// <summary>
     /// SQLite 表 特征
@@ -17,6 +18,7 @@ namespace Tup.SQLiteInitializer
             Name = name;
         }
     }
+
     /// <summary>
     /// SQLite 字段 特征
     /// </summary>
@@ -30,10 +32,12 @@ namespace Tup.SQLiteInitializer
         /// Column Name
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// Column Default Value
         /// </summary>
         public string DefaultValue { get; set; }
+
         /// <summary>
         /// Column Value Type
         /// </summary>
@@ -41,42 +45,47 @@ namespace Tup.SQLiteInitializer
         /// 类型定制设置, 例如: DECIMAL(19,4)
         /// </remarks>
         public string ValueType { get; set; }
+
         /// <summary>
         /// Column IS NOT NULL
         /// </summary>
         public bool IsNotNull { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ColumnAttribute()
             : this(null, false)
         { }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         public ColumnAttribute(string name)
             : this(name, false)
         { }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         /// <param name="isNotNull"></param>
         public ColumnAttribute(string name, bool isNotNull)
             : this(name, null, isNotNull)
         { }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
         public ColumnAttribute(string name, string defaultValue)
             : this(name, defaultValue, false)
         { }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="name"></param>
         /// <param name="defaultValue"></param>
@@ -88,6 +97,7 @@ namespace Tup.SQLiteInitializer
             this.IsNotNull = isNotNull;
         }
     }
+
     /// <summary>
     /// SQLite 忽略字段 特征
     /// </summary>
@@ -95,6 +105,7 @@ namespace Tup.SQLiteInitializer
     public class IgnoreAttribute : Attribute
     {
     }
+
     /// <summary>
     /// SQLite 字段最大长度 特征
     /// </summary>
@@ -108,6 +119,7 @@ namespace Tup.SQLiteInitializer
             Value = length;
         }
     }
+
     /// <summary>
     /// SQLite 主键 特征
     /// </summary>
@@ -118,12 +130,14 @@ namespace Tup.SQLiteInitializer
         /// 复合主键顺序
         /// </summary>
         public int Order { get; set; }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public PrimaryKeyAttribute() : this(0) { }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="order">复合主键顺序</param>
         public PrimaryKeyAttribute(int order)
@@ -131,6 +145,7 @@ namespace Tup.SQLiteInitializer
             Order = order;
         }
     }
+
     /// <summary>
     /// SQLite 自动增加字段 特征
     /// </summary>
@@ -138,6 +153,7 @@ namespace Tup.SQLiteInitializer
     public class AutoIncrementAttribute : Attribute
     {
     }
+
     /// <summary>
     /// SQLite 索引 特征
     /// </summary>
@@ -151,10 +167,12 @@ namespace Tup.SQLiteInitializer
         /// 复合索引多个字段采用相同名称
         /// </remarks>
         public string Name { get; set; }
+
         /// <summary>
         /// 复合索引字段循序
         /// </summary>
         public int Order { get; set; }
+
         /// <summary>
         /// 是否唯一索引
         /// </summary>
@@ -170,6 +188,7 @@ namespace Tup.SQLiteInitializer
             Order = order;
         }
     }
+
     /// <summary>
     /// SQLite 唯一索引 特征
     /// </summary>
@@ -182,6 +201,7 @@ namespace Tup.SQLiteInitializer
             set { /* throw?  */ }
         }
     }
+
     /// <summary>
     /// SQLite 索引比较规则 特征
     /// </summary>
@@ -198,5 +218,6 @@ namespace Tup.SQLiteInitializer
             Value = collation;
         }
     }
-    #endregion
+
+    #endregion 表映射 特征
 }

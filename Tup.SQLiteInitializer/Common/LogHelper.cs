@@ -9,7 +9,7 @@ namespace Tup.SQLiteInitializer.Common
     internal static class LogHelper
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="msg"></param>
         [Conditional("DEBUG")]
@@ -17,8 +17,9 @@ namespace Tup.SQLiteInitializer.Common
         {
             Debug.WriteLine("[BTC]\t{0}\t{1}", DateTime.Now, msg);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="format"></param>
         /// <param name="para"></param>
@@ -29,23 +30,26 @@ namespace Tup.SQLiteInitializer.Common
         }
 
         #region LogError
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="msg"></param>
         public static void LogError(string msg)
         {
             Debug.WriteLine("[BTC]\t{0}\t{1}", DateTime.Now, msg);
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="format"></param>
         /// <param name="para"></param>
         public static void LogError(string format, params object[] para)
         {
             LogDebug(string.Format(format, para));
-        } 
-        #endregion
+        }
+
+        #endregion LogError
     }
 }
