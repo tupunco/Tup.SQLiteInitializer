@@ -10,11 +10,6 @@
 /*/*.user
 /*/Dotfuscated/*
 /*/PerfLogs/*
-/Tup.Dota2Recipe.Spider/PerformanceLogs/*
-/Tup.Dota2Recipe.Spider/SubmissionInfo/*
-/Tup.Dota2Recipe.Spider/Release/*
-/Tup.Dota2Recipe.Spider/Debug/*
 
 /UpgradeLog.*
 /_UpgradeReport_Files/*.*
-/Tup.Dota2Recipe.Spider/test_qmap/*
