@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Threading;
+
+using Tup.SQLiteInitializer.Common;
 
 namespace Tup.SQLiteInitializer
 {
@@ -56,7 +59,7 @@ namespace Tup.SQLiteInitializer
             objFactory = System.Data.SQLite.SQLiteFactory.Instance;
 
             objConnection = objFactory.CreateConnection();
-            objCommand = objFactory.CreateCommand();
+            objCommand = new DbCommandWrapper(objFactory.CreateCommand());
 
             objConnection.ConnectionString = connectionString;
             objCommand.Connection = objConnection;
@@ -110,12 +113,13 @@ namespace Tup.SQLiteInitializer
         /// </value>
         public DbCommand Command
         {
-            get
-            {
-                return objCommand;
-            }
+            get { return objCommand; }
         }
 
+        /// <summary>
+        /// 是否事务加锁
+        /// </summary>
+        private ThreadLocal<bool> isTransactionLock = new ThreadLocal<bool>(() => false);
         /// <summary>
         /// 开启事务
         /// </summary>
@@ -125,9 +129,12 @@ namespace Tup.SQLiteInitializer
             {
                 objConnection.Open();
             }
+
+            Monitor.Enter(lockDBHelper);
+            isTransactionLock.Value = true;
+
             objCommand.Transaction = objConnection.BeginTransaction();
         }
-
         /// <summary>
         /// 提交事务
         /// </summary>
@@ -135,6 +142,8 @@ namespace Tup.SQLiteInitializer
         {
             objCommand.Transaction.Commit();
             objConnection.Close();
+
+            TryExitDBHelperLock("CommitTransaction");
         }
 
         /// <summary>
@@ -142,8 +151,43 @@ namespace Tup.SQLiteInitializer
         /// </summary>
         public void RollbackTransaction()
         {
-            objCommand.Transaction.Rollback();
-            objConnection.Close();
+            try
+            {
+                objCommand.Transaction.Rollback();
+                objConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                //LogHelper.Error("RollbackTransaction-{0}", ex);
+                ex = null;
+            }
+            finally
+            {
+                TryExitDBHelperLock("RollbackTransaction");
+            }
+        }
+        /// <summary>
+        /// Try Exit DBHelper Lock
+        /// </summary>
+        /// <param name="tag"></param>
+        private void TryExitDBHelperLock(string tag)
+        {
+            #region ExitLock
+            try
+            {
+                if (isTransactionLock.Value)
+                    Monitor.Exit(lockDBHelper);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogError("{0}-Monitor.Exit-lockDBHelper-{1}", tag, ex);
+                ex = null;
+            }
+            finally
+            {
+                isTransactionLock.Value = false;
+            }
+            #endregion
         }
 
         /// <summary>
@@ -187,34 +231,31 @@ namespace Tup.SQLiteInitializer
         /// <returns></returns>
         public int ExecuteNonQuery(string query, CommandType commandtype, ConnectionState connectionstate)
         {
-            lock (lockDBHelper)
+            objCommand.CommandText = query;
+            objCommand.CommandType = commandtype;
+            int i = -1;
+            try
             {
-                objCommand.CommandText = query;
-                objCommand.CommandType = commandtype;
-                int i = -1;
-                try
+                if (objConnection.State == System.Data.ConnectionState.Closed)
                 {
-                    if (objConnection.State == System.Data.ConnectionState.Closed)
-                    {
-                        objConnection.Open();
-                    }
-                    i = objCommand.ExecuteNonQuery();
+                    objConnection.Open();
                 }
-                catch (Exception ex)
-                {
-                    HandleExceptions(ex);
-                }
-                finally
-                {
-                    objCommand.Parameters.Clear();
-                    if (connectionstate == ConnectionState.CloseOnExit)
-                    {
-                        objConnection.Close();
-                    }
-                }
-
-                return i;
+                i = objCommand.ExecuteNonQuery();
             }
+            catch (Exception ex)
+            {
+                HandleExceptions(ex);
+            }
+            finally
+            {
+                objCommand.Parameters.Clear();
+                if (connectionstate == ConnectionState.CloseOnExit)
+                {
+                    objConnection.Close();
+                }
+            }
+
+            return i;
         }
 
         /// <summary>
@@ -440,10 +481,117 @@ namespace Tup.SQLiteInitializer
         /// </summary>
         public void Dispose()
         {
+            TryExitDBHelperLock("RollbackTransaction");
+
             objConnection.Close();
             objConnection.Dispose();
             objCommand.Dispose();
         }
+
+        #region DbCommandWrapper
+        /// <summary>
+        /// DbCommand Wrapper
+        /// ExecuteNonQuery 提供锁操作
+        /// </summary>
+        private class DbCommandWrapper : DbCommand
+        {
+            private DbCommand m_DbCommand = null;
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="dbCommand"></param>
+            public DbCommandWrapper(DbCommand dbCommand)
+            {
+                this.m_DbCommand = dbCommand;
+            }
+
+            #region override
+            public override void Cancel()
+            {
+                m_DbCommand.Cancel();
+            }
+
+            public override string CommandText
+            {
+                get { return m_DbCommand.CommandText; }
+                set { m_DbCommand.CommandText = value; }
+            }
+
+            public override int CommandTimeout
+            {
+                get { return m_DbCommand.CommandTimeout; }
+                set { m_DbCommand.CommandTimeout = value; }
+            }
+
+            public override CommandType CommandType
+            {
+                get { return m_DbCommand.CommandType; }
+                set { m_DbCommand.CommandType = value; }
+            }
+
+            public override bool DesignTimeVisible
+            {
+                get { return m_DbCommand.DesignTimeVisible; }
+                set { m_DbCommand.DesignTimeVisible = value; }
+            }
+
+            public override int ExecuteNonQuery()
+            {
+                lock (lockDBHelper)
+                {
+                    return m_DbCommand.ExecuteNonQuery();
+                }
+            }
+
+            public override object ExecuteScalar()
+            {
+                lock (lockDBHelper)
+                    return m_DbCommand.ExecuteScalar();
+            }
+
+            public override void Prepare()
+            {
+                m_DbCommand.Prepare();
+            }
+
+            public override UpdateRowSource UpdatedRowSource
+            {
+                get { return m_DbCommand.UpdatedRowSource; }
+                set { m_DbCommand.UpdatedRowSource = value; }
+            }
+            #endregion
+
+            #region protected
+            protected override DbParameter CreateDbParameter()
+            {
+                return m_DbCommand.CreateParameter();
+            }
+
+            protected override DbConnection DbConnection
+            {
+                get { return m_DbCommand.Connection; }
+                set { m_DbCommand.Connection = value; }
+            }
+
+            protected override DbParameterCollection DbParameterCollection
+            {
+                get { return m_DbCommand.Parameters; }
+            }
+
+            protected override DbTransaction DbTransaction
+            {
+                get { return m_DbCommand.Transaction; }
+                set { m_DbCommand.Transaction = value; }
+            }
+
+            protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
+            {
+                lock (lockDBHelper)
+                    return m_DbCommand.ExecuteReader(behavior);
+            }
+            #endregion
+        }
+        #endregion
     }
 
     /// <summary>

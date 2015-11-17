@@ -340,7 +340,7 @@ namespace Tup.SQLiteInitializer.Impl
 
             var count = Execute(query);
 
-            if (count == 0)
+            if (count == 0 || count == -1) //不同版本的 System.Data.SQLite.dll 返回的结果不一样, 老版本永远返回 0 , 新版本永远返回 -1
             { //Possible bug: This always seems to return 0?
                 // Table already exists, migrate it
                 MigrateTable(map);
@@ -871,6 +871,7 @@ namespace Tup.SQLiteInitializer.Impl
             }
             else if (clrType == typeof(DateTime))
             {
+                p.DefaultValueBrackets = true;
                 return storeDateTimeAsTicks ? "BIGINT" : "DATETIME";
 #if !NETFX_CORE
             }
