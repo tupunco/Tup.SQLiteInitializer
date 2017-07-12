@@ -847,7 +847,9 @@ namespace Tup.SQLiteInitializer.Impl
             {
                 return "SMALLINT";
             }
-            if (clrType == typeof(Byte) || clrType == typeof(UInt16) || clrType == typeof(SByte) || clrType == typeof(Int16) || clrType == typeof(Int32))
+            if (clrType == typeof(Byte) || clrType == typeof(UInt16) || clrType == typeof(SByte) 
+                || clrType == typeof(Int16) || clrType == typeof(Int32)
+                || (clrType == typeof(Int64) && p.IsPK))
             {
                 return "INTEGER";
             }
